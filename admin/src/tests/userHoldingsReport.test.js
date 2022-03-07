@@ -1,4 +1,5 @@
-const { createHoldingData } = require("../helpers")
+const { createHoldingData, createCsv } = require("../helpers")
+const { parse } = require("fast-csv")
 
 describe("generate user holdings object", () => {
   it("should generate users holdings object", () => {
@@ -62,5 +63,104 @@ describe("generate user holdings object", () => {
         value: 10000,
       },
     ])
+  })
+})
+
+describe("generate csv for holding report", () => {
+  it("should generate csv report", () => {
+    const holdingData = [
+      {
+        userId: "1",
+        firstName: "Billy",
+        lastName: "Bob",
+        date: "2020-01-01",
+        holding: "The Small Investment Company",
+        value: 1400,
+      },
+      {
+        userId: "2",
+        firstName: "Sheila",
+        lastName: "Aussie",
+        date: "2020-01-01",
+        holding: "The Big Investment Company",
+        value: 10000,
+      },
+      {
+        userId: "2",
+        firstName: "Sheila",
+        lastName: "Aussie",
+        date: "2020-01-01",
+        holding: "The Small Investment Company",
+        value: 10000,
+      },
+    ]
+
+    const fields = [
+      {
+        label: "User",
+        value: "userId",
+      },
+      {
+        label: "First Name",
+        value: "firstName",
+      },
+      {
+        label: "Last Name",
+        value: "lastName",
+      },
+      {
+        label: "Date",
+        value: "date",
+      },
+      {
+        label: "Holding",
+        value: "holding",
+      },
+      {
+        label: "Value",
+        value: "value",
+      },
+    ]
+
+    /* Expected object array after parsing csv */
+    const expectedCsv = [
+      {
+        User: "1",
+        "First Name": "Billy",
+        "Last Name": "Bob",
+        Date: "2020-01-01",
+        Holding: "The Small Investment Company",
+        Value: "1400",
+      },
+      {
+        User: "2",
+        "First Name": "Sheila",
+        "Last Name": "Aussie",
+        Date: "2020-01-01",
+        Holding: "The Big Investment Company",
+        Value: "10000",
+      },
+      {
+        User: "2",
+        "First Name": "Sheila",
+        "Last Name": "Aussie",
+        Date: "2020-01-01",
+        Holding: "The Small Investment Company",
+        Value: "10000",
+      },
+    ]
+
+    const result = createCsv(fields, holdingData)
+
+    let parsedCsv = []
+
+    parse(result, { headers: true })
+      .on("error", (error) => console.error(error))
+      .on("data", (row) => {
+        parsedCsv.push(row)
+      })
+      .on("end", () => {
+        expect(parsedCsv).toEqual(expectedCsv)
+      })
   })
 })
