@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "develop": "nodemon src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -24,9 +24,14 @@
     "nodemon": "^2.0.15"
   },
   "dependencies": {
+    "@types/jest": "^27.4.1",
+    "axios": "^0.26.0",
     "body-parser": "^1.19.2",
     "config": "^3.3.7",
+    "eslint-plugin-jest": "^26.1.1",
     "express": "^4.17.3",
+    "jest": "^27.5.1",
+    "json2csv": "^5.0.7",
     "ramda": "^0.28.0",
     "request": "^2.88.2"
   }
