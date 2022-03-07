@@ -37,8 +37,22 @@ We're interested in how you break down the work and build your solution in a cle
 - How to run any additional scripts or tests you may have added
 - Relating to the task please add answers to the following questions;
     1. How might you make this service more secure?
+        - Using domains and certificates for each micro-service can make it more secure as it serves https content with TLS certificates, also should allow only https content.
+        - Implement best practices to prevent CSRF Attacks by Token Based Mitigation.
+        - Depending on the usage requirements allowing CORS from only known hosts. 
     2. How would you make this solution scale to millions of records?
+        - Pagination would help in this case to fetch the records by each page and reduces the stress and costs for db calls
+        - Wrapping csv report creation with AsyncParser could be helpful
+        - Horizontal scaling -> Using load a balancer to distribute and balance the traffic across all nodes (Nginx or HAProxy) 
+        - Depending on the system and flexibility SQL database or No sql database can be chosen
+        - Scaling RDBMS - replication, federation (functional programming) and choosing cloud hosted database solution
+        - For this case the data is structured or maybe in future semi-structured so Relational or Columnar database is a good choice and Key-value stores may be used e.g - Redis
+        - Introducing caching to different layers could also be very helpful.
+        - Using AWS serverless and dynamodb with API gateway could be potentially one of the solutions to scale (any alternative enterprise similar cloud solution is also an option). One major demerit of the above cloud based solution would be a vendor lock-in. 
     3. What else would you have liked to improve given more time?
+        - Pagination and filtering to generate report for only the required reports
+        - Better coverage of unit tests and also integration tests to check external API calls
+        - Better usage of ramda js and ES6 would improve code readability
   
 
 On completion email a link to your repository to your contact at Moneyhub and ensure it is publicly accessible.
