@@ -1,7 +1,6 @@
 const express = require("express")
 const bodyParser = require("body-parser")
 const config = require("config")
-const request = require("request")
 const axios = require("axios").default
 const { getCompanies } = require("./services/companyService")
 const { getInvestments } = require("./services/investmentService")
@@ -13,17 +12,13 @@ app.use(bodyParser.json({ limit: "10mb" }))
 
 app.get("/investments/:id", (req, res) => {
   const { id } = req.params
-  request.get(
-    `${config.investmentsServiceUrl}/investments/${id}`,
-    (e, r, investments) => {
-      if (e) {
-        console.error(e)
-        res.send(500)
-      } else {
-        res.send(investments)
-      }
-    }
-  )
+  axios
+    .get(`${config.investmentsServiceUrl}/investments/${id}`)
+    .then((investments) => res.send(investments.data))
+    .catch((error) => {
+      console.error(error)
+      res.sendStatus(500)
+    })
 })
 
 app.post("/generateUserHoldingsReport", async (_, res) => {
@@ -33,25 +28,32 @@ app.post("/generateUserHoldingsReport", async (_, res) => {
       getCompanies(),
     ])
 
-    const fields = [{
-      label: 'User',
-      value: 'userId'
-    }, {
-      label: 'First Name',
-      value: 'firstName'
-    }, {
-      label: 'Last Name',
-      value: 'lastName'
-    }, {
-      label: 'Date',
-      value: 'date'
-    }, {
-      label: 'Holding',
-      value: 'holding'
-    }, {
-      label: 'Value',
-      value: 'value'
-    }]
+    const fields = [
+      {
+        label: "User",
+        value: "userId",
+      },
+      {
+        label: "First Name",
+        value: "firstName",
+      },
+      {
+        label: "Last Name",
+        value: "lastName",
+      },
+      {
+        label: "Date",
+        value: "date",
+      },
+      {
+        label: "Holding",
+        value: "holding",
+      },
+      {
+        label: "Value",
+        value: "value",
+      },
+    ]
 
     const investments = investmentsResponse.data
     const companies = companiesResponse.data
